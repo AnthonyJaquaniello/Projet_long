@@ -25,7 +25,7 @@ list_chrms1 =  glob.glob("*.fa")
 list_chrms2 =  glob.glob("*.fasta")
 list_chrms=list_chrms1+list_chrms2
 
-enz=HindIII   #   Restriction enzyme used in the experiment 
+enz=DpnII   #   Restriction enzyme used in the experiment 
 #enz=sys.argv[2]
 
 print("Enzyme used:"+str(enz)+"\n")
