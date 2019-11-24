@@ -1,8 +1,11 @@
+import os
+
 INDEX = ['1','2','3','4','rev.1','rev.2']
+SRR = os.environ.get("SRR").split()
 
 rule all:
     input:
-        '/media/anthony/POULOP/HIC/results/SRR9900853.bed2'
+        expand('/media/anthony/POULOP/HIC/results/{srr}.bed2', srr=SRR)
 
 rule alignment:
     input:
