@@ -2,7 +2,7 @@ INDEX = ['1','2','3','4','rev.1','rev.2']
 
 rule all:
     input:
-        '/media/anthony/POULOP/HIC/results/SRR9900851.bed2'
+        '/media/anthony/POULOP/HIC/results/SRR9900853.bed2'
 
 rule alignment:
     input:
@@ -16,8 +16,8 @@ rule alignment:
         cat /media/anthony/POULOP/HIC/data/ref/NC*.fasta > /media/anthony/POULOP/HIC/data/ref/genome.fa
         bowtie2-build /media/anthony/POULOP/HIC/data/ref/genome.fa genome
         mv genome* /media/anthony/POULOP/HIC/data/ref/
-        bowtie2 -x /media/anthony/POULOP/HIC/data/ref/genome -p18 --sam-no-hd --sam-no-sq --local --very-sensitive-local -S {output.left_align} {input.left_read}
-        bowtie2 -x /media/anthony/POULOP/HIC/data/ref/genome -p18 --sam-no-hd --sam-no-sq --local --very-sensitive-local -S {output.right_align} {input.right_read}
+        bowtie2  -p18 --local --very-sensitive-local --no-hd --no-sq -x /media/anthony/POULOP/HIC/data/ref/genome -q {input.left_read} -S {output.left_align}
+        bowtie2 -p 18 --local --very-sensitive-local --no-hd --no-sq -x /media/anthony/POULOP/HIC/data/ref/genome -q {input.right_read} -S {output.right_align}
         mv /media/anthony/POULOP/HIC/data/ref/genome.fa /media/anthony/POULOP/HIC/data/obsolete/
         """
 
@@ -68,7 +68,7 @@ rule quality_filtering:
         '/media/anthony/POULOP/HIC/alignment/{sample}.merged_qualfilt.dat'
     shell:
         """
-        awk '{{if($1==$6 && $5>= 1 && $10 >= 1) print $2,$3,$4,$7,$8,$9}}'  {input}  > {output}
+        awk '{{if($1==$6 && $5>= 30 && $10 >= 30) print $2,$3,$4,$7,$8,$9}}'  {input}  > {output}
         rm {input}
         """
 
@@ -76,6 +76,8 @@ rule fragment_restriction:
     input:
         genome='/media/anthony/POULOP/HIC/data/ref/',
         align='/media/anthony/POULOP/HIC/alignment/{sample}.merged_qualfilt.dat'
+    params:
+        enz='DpnII'
     output:
         '/media/anthony/POULOP/HIC/alignment/{sample}.merged_qualfilt.dat.indices'
     script:
