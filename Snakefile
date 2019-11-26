@@ -17,9 +17,6 @@ rule alignment:
         right_align='{DIR}/alignment/{sample}_2.sam'
     shell:
         """
-        cat {DIR}/data/ref/NC*.fasta > {DIR}/data/ref/genome.fa
-        bowtie2-build {DIR}/data/ref/genome.fa genome
-        mv genome* {DIR}/data/ref/
         bowtie2  -p18 --local --very-sensitive-local --no-hd --no-sq -x {DIR}/data/ref/genome -q {input.left_read} -S {output.left_align}
         bowtie2 -p 18 --local --very-sensitive-local --no-hd --no-sq -x {DIR}/data/ref/genome -q {input.right_read} -S {output.right_align}
         mv {DIR}/data/ref/genome.fa {DIR}/data/obsolete/
