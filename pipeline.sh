@@ -1,7 +1,7 @@
 #!/bin/bash
 #avant faut créer un dossier HIC
 srr=$1
-dire=$3 #chemin absolu vers dossier HIC
+dire=$2 #chemin absolu vers dossier HIC
 #Le script-shell sera exécuté dans Projet_long/
 
 mkdir $dire/data/ $dire/alignment/ $dire/results/
