@@ -81,34 +81,34 @@ for chr1 in list_all_chrms :
     plt.imshow(mat**0.25, interpolation="none", cmap="afmhot_r")
     plt.title(chr1+"\n"+bank)
     plt.xlabel("Position along the chromosome , bin "+str(bin_matrice))
-    plt.savefig("Map_{}.png".format(chr1))
+    plt.savefig("results/map_{}.png".format(chr1))
          
     pos_set = df.loc[(df[0] == chr1)]
     pos_set = np.array(pos_set)
     n_pos_set = n_pos_set + pos_set.shape[0]
     ns =0
-    print(pos_set)
-    print("pos_set.shape:{}".format(pos_set.shape))
-    for i in range(pos_set.shape[0]):
-        try:
-            site1 = int(pos_set[i,1])
-            site2 = int(pos_set[i,4])
-        except IndexError:
-            site1 = int(pos_set[i,1])
-            site2 = int(pos_set[i,4])
-        site1 = int(site1 / bin_matrice)
-        site2 = int(site2 / bin_matrice)
+    #print(pos_set)
+    #print("pos_set.shape:{}".format(pos_set.shape))
+    #for i in range(pos_set.shape[0]):
+        #try:
+            #site1 = int(pos_set[i,1])
+            #site2 = int(pos_set[i,4])
+        #except IndexError:
+            #site1 = int(pos_set[i,1])
+            #site2 = int(pos_set[i,4])
+        #site1 = int(site1 / bin_matrice)
+        #site2 = int(site2 / bin_matrice)
         #plot(site1, site2, "", color="blue")
-        plt.scatter(site1, site2, s=20, facecolors='none', edgecolors='b')
-        ns +=1
-        pi =0
+        #plt.scatter(site1, site2, s=20, facecolors='none', edgecolors='b')
+        #ns +=1
+        #pi =0
 
-pdf = matplotlib.backends.backend_pdf.PdfPages(filename+"_"+str( int(area*bin_matrice/1000) )+".pdf")
-for fig in range(1, plt.figure().number): ## will open an empty extra figure :(
-    pdf.savefig(fig)
-pdf.close()
+#pdf = matplotlib.backends.backend_pdf.PdfPages(filename+"_"+str( int(area*bin_matrice/1000) )+".pdf")
+#for fig in range(1, plt.figure().number): ## will open an empty extra figure :(
+    #pdf.savefig(fig)
+#pdf.close()
      
-plt.close("all")
+#plt.close("all")
 
 print("ALL the experiements are finished!")
 
