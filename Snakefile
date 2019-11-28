@@ -5,7 +5,8 @@ DIR = os.environ.get("DIR").split()
 
 rule all:
     input:
-        expand('{dir}/results/{srr}.bed2', srr=SRR, dir=DIR)
+        expand('{dir}/results/{srr}.bed2', srr=SRR, dir=DIR),
+	#expand('results/map_{chr}.png',chr=CHR)
 
 rule alignment:
     input:
