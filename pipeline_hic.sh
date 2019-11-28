@@ -4,16 +4,18 @@ srr=$1
 dire=$2 #chemin absolu vers dossier HIC
 #Le script-shell sera exécuté dans Projet_long/
 
-mkdir $dire/data/ $dire/alignment/ $dire/results/
-mkdir $dire/data/fastq/ $dire/data/ref/ $dire/data/obsolete/
+#mkdir $dire/data/ $dire/alignment/ $dire/results/
+#mkdir $dire/data/fastq/ $dire/data/ref/ $dire/data/obsolete/
 
-cat *.fasta > genome.fa
-mv genome.fa $dire/data/ref/
-mv *.fasta $dire/data/ref/
+#cat *.fasta > genome.fa
+#mv genome.fa $dire/data/ref/
+#mv *.fasta $dire/data/ref/
 
-fasterq-dump $srr -O $dire/data/fastq/
+#fasterq-dump $srr -O $dire/data/fastq/
 
-bowtie2-build $dire/data/ref/genome.fa genome
-mv genome* $dire/data/ref/
+#bowtie2-build $dire/data/ref/genome.fa genome
+#mv genome* $dire/data/ref/
 
 DIR="$dire" SRR="$srr" snakemake -j 8
+
+python3 examples_codes/loops_visualisation_yeast.py $dire/results data/Loops_detected_score.txt2
