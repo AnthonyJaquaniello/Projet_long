@@ -1,6 +1,5 @@
 import os
 
-INDEX = ['1','2','3','4','rev.1','rev.2']
 SRR = os.environ.get("SRR").split()
 DIR = os.environ.get("DIR").split()
 
@@ -117,4 +116,3 @@ rule post_processing:
         rm {DIR}/alignment/*.dat
         rm {DIR}/alignment/*.indices
         """
-
