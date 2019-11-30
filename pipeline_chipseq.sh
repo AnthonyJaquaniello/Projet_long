@@ -1,6 +1,5 @@
 srr=$1
-ref=$2 #path to chr
-dire=$3
+dire=$2
 
 mkdir $dire/data/ $dire/results/ $dire/alignment/
 mkdir $dire/data/fastq/ $dire/data/ref/
@@ -15,3 +14,5 @@ bowtie2 -p8 '--local' '--very-sensitive-local' '-x' $dire/data/ref/genome -q $di
 samtools view -Sb $dire/alignment/$srr.sam > $dire/alignment/$srr.bam
 samtools 'sort' $dire/alignment/$srr.bam > $dire/alignment/$srr.sorted.bam 
 samtools index $dire/alignment/$srr.sorted.bam
+
+python3 examples_codes/peaks_extract.py $dire/alignment/$srr.sorted.bam $dire/results/
