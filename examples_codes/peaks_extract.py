@@ -19,7 +19,7 @@ for key in name_correcting:
     
 #sys.argv[1] = path to bamfile
 bam = ps.AlignmentFile(sys.argv[1],'rb')
-chromosoms = name_correcting.values()
+chromosoms = list(name_correcting.values())
 all_chr = {} #dict to dict : key = one chr, value = dict (see below)
 
 for chromo in chromosoms:
