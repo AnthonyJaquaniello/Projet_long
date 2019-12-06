@@ -29,4 +29,5 @@ echo '--> Done !'
 for i in $list_srr;do
 	DIR="$dire/HIC" SRR="$i" snakemake -j 8
 	python3 examples_codes/loops_visualisation_yeast.py $dire/HIC/results/$i $pattern
+	chromosight detect $dire/HIC/results/$i/*.bg2 $dire/HIC/results/$i/
 done
