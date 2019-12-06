@@ -25,7 +25,8 @@ for i in $list_real; do
 	samtools view -Sb $dire/CHIPSEQ/alignment/$i.sam > $dire/CHIPSEQ/alignment/$i.bam
 	samtools 'sort' $dire/CHIPSEQ/alignment/$i.bam > $dire/CHIPSEQ/alignment/$i.sorted.bam
 	samtools index $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/alignment/$i.sorted.bam.bai
-	python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/results/IP/
+	mkdir $dire/CHIPSEQ/results/IP/$i/
+	python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/results/IP/$i/
 	echo $i 'terminated'
 done
 echo '--> done !'
@@ -43,7 +44,8 @@ for i in $list_input; do
 	echo 'Indexing...'
 	samtools index $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/alignment/$i.input.sorted.bam.bai
 	echo 'Peak extraction...'
-	python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/results/input/
+	mkdir $dire/CHIPSEQ/results/input/$i/
+	python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/results/input/$i/
 	echo $i 'terminated'
 done
 echo '--> done'
