@@ -28,7 +28,7 @@ for chromo in chromosoms:
         coverage[pileupcolumn.pos] = pileupcolumn.n
     all_chr[chromo] = coverage
     vect = list(all_chr[chromo].values()) #coverage values
-    peaks = find_peaks(vect,width= 1,threshold=3)   
+    peaks = find_peaks(vect,width= 1,threshold=2)   
     with open(path_results+name_conversion[chromo]+'_peaks.txt','w') as filout:
         for peak in list(peaks[0]):
             filout.write(str(peak)+"\n")
