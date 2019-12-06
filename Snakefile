@@ -5,8 +5,7 @@ DIR = os.environ.get("DIR").split()
 
 rule all:
     input:
-        expand('{dir}/results/{srr}/{srr}.bed2', srr=SRR, dir=DIR),
-	#expand('results/map_{chr}.png',chr=CHR)
+        expand('{dir}/results/{srr}/{srr}.bg2', srr=SRR, dir=DIR)
 
 rule alignment:
     input:
@@ -108,7 +107,7 @@ rule post_processing:
     input:
         bad_name='{DIR}/alignment/{sample}.merged_qualfilt.dat.indices.filtered.bed2'
     output:
-        good_name='{DIR}/results/{SRR}/{sample}.bed2'
+        good_name='{DIR}/results/{SRR}/{sample}.bg2'
     shell:
         """
         mv {input.bad_name} {output.good_name}
