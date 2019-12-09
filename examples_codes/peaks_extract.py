@@ -3,6 +3,8 @@ import os
 import sys
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
+from scipy.signal import peak_widths
+from math import ceil
 
 name_correcting = {'chr1':'NC_001133.9','chr2':'NC_001134.8','chr3':'NC_001135.5',
                    'chr4':'NC_001136.10','chr5':'NC_001137.3','chr6':'NC_001138.5',
@@ -22,13 +24,23 @@ bam = ps.AlignmentFile(sys.argv[1],'rb')
 chromosoms = list(name_correcting.values())
 all_chr = {} #dict to dict : key = one chr, value = dict (see below)
 
+all_chr = {}
+
+with open(path_results + "chip_seq_peaks.txt","w") as filout:
+    filout.write("chrom1"+'\t'+"start1"+'\t'+"end1"+'\n')
+    
 for chromo in chromosoms:
-    coverage = {} #dict: key = pos, value = coverage
+    print(chromo)
+    k = {}
+    coverage = []
+    k["chrom1"] = chromo
     for pileupcolumn in bam.pileup(chromo):
-        coverage[pileupcolumn.pos] = pileupcolumn.n
-    all_chr[chromo] = coverage
-    vect = list(all_chr[chromo].values()) #coverage values
-    peaks = find_peaks(vect,width= 1,threshold=2)   
-    with open(path_results+name_conversion[chromo]+'_peaks.txt','w') as filout:
-        for peak in list(peaks[0]):
-            filout.write(str(peak)+"\n")
+        coverage.append(pileupcolumn.n)
+    peaks = find_peaks(coverage,threshold=2)
+    width = peak_widths(coverage,list(peaks[0]))
+    k["start1"] = list(peaks[0])
+    k["end1"] = list(peaks[0] + width[0])
+    all_chr[chromo] = k
+    with open(path_results + "chip_seq_peaks.txt","a") as filout:
+        for start,end in zip(k["start1"], k["end1"]):
+            filout.write("{}\t{}\t{}\n".format(k["chrom1"],start,ceil(end)))   
