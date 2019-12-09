@@ -43,4 +43,5 @@ for chromo in chromosoms:
     all_chr[chromo] = k
     with open(path_results + "chip_seq_peaks.txt","a") as filout:
         for start,end in zip(k["start1"], k["end1"]):
-            filout.write("{}\t{}\t{}\n".format(k["chrom1"],start,ceil(end)))   
+            filout.write("{}\t{}\t{}\n".format(k["chrom1"],start,ceil(end)))
+    print(" ok !")
