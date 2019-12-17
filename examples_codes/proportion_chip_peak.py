@@ -53,7 +53,7 @@ l2=len(groupB)
 l3=len(groupA)
 l4=NTOT
 
-Mcont = [[l1, l2-l1], [l3-l1, l4-l3]]
+Mcont = [[l1, l2-l1], [l3, l4-l3]]
 oddsratio, pvalue = stats.fisher_exact(Mcont)
 
 # Plots: 
