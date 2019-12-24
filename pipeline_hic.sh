@@ -3,7 +3,6 @@
 srr=$1 #path to file containing SRR of HIC experiment
 dire=$2 #where the root directory (HIC) should be created, don't write / at the end
 ref=$3 #path to all chr.fasta files, don't write / at the end
-pattern=$4 #path to pattern file
 
 list_srr=$(cat $srr)
 
@@ -28,6 +27,6 @@ echo '--> Done !'
 
 for i in $list_srr;do
 	DIR="$dire/HIC" SRR="$i" snakemake -j 8
-	python3 examples_codes/loops_visualisation_yeast.py $dire/HIC/results/$i $pattern
-	chromosight detect $dire/HIC/results/$i/*.bg2 $dire/HIC/results/$i/
+	chromosight detect $dire/HIC/results/$i/*.bg2 --output $dire/HIC/results/$i/
+	python3 examples_codes/loops_visualisation_yeast.py $dire/HIC/results/$i $dire/HIC/results/$i/loops_out.txt
 done

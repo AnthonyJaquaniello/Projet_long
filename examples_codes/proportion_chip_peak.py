@@ -14,7 +14,7 @@ from matplotlib.font_manager import FontProperties
 import scipy.stats as stats
 
 BIN = 2000 #10 000 for human
-NTOT = 6037 #283188 total number of bins for human
+NTOT = 6037 #283188 total number of bins for human (here is for yeast)
 pattern = sys.argv[1] #from chromosight
 peaks = sys.argv[2] #from peaks_extraction.py
 name = sys.argv[3]

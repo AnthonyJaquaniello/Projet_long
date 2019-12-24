@@ -1,7 +1,6 @@
 srr=$1 #path to srr list file .txt
 input=$2 #idem
 dire=$3 #path to location where dir root will be created
-ref=$4 #path to genome.fa
 
 list_real=$(cat $srr)
 list_input=$(cat $input)
@@ -13,7 +12,7 @@ mkdir $dire/CHIPSEQ/data/fastq/ $dire/CHIPSEQ/data/ref/ $dire/CHIPSEQ/results/in
 echo '--> done !'
 
 echo 'Indexing of the refrence...'
-cp $ref $dire/CHIPSEQ/data/ref/genome.fa
+cp /HIC/data/obsolete/genome.fa  $dire/CHIPSEQ/data/ref/genome.fa
 bowtie2-build $dire/CHIPSEQ/data/ref/genome.fa genome
 mv *.bt2 $dire/CHIPSEQ/data/ref/
 echo '--> done !'
@@ -25,6 +24,7 @@ for i in $list_real; do
 	samtools view -Sb $dire/CHIPSEQ/alignment/$i.sam > $dire/CHIPSEQ/alignment/$i.bam
 	samtools 'sort' $dire/CHIPSEQ/alignment/$i.bam > $dire/CHIPSEQ/alignment/$i.sorted.bam
 	samtools index $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/alignment/$i.sorted.bam.bai
+	echo 'Peak extraction...'
 	mkdir $dire/CHIPSEQ/results/IP/$i/
 	python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/results/IP/$i/
 	echo $i 'terminated'

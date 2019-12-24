@@ -1,0 +1,32 @@
+#!/bin/bash
+
+hic_srr=$1 #path to file containing SRR of HIC experiment
+chip_srr=$2 #path to file containing SRR of real Chipseq experiment
+input_srr=$3 #path to file containing SRR of negative control Chipseq experiment
+dire=$4 #where the roots directories should be created, don't write / at the end
+chr_fasta=$5 #path to all chr.fasta files, don't write / at the end
+
+./pipeline_hic.sh $hic_srr $dire $chr_fasta
+
+./pipeline_chipseq.sh $chip_srr $input_srr $dire
+hic=()
+chip=()
+a=0
+b=0
+
+for i in $(cat $hic_srr)
+do
+	hic[$a]=$i
+	let 'a+=1'
+done
+
+for j in $(cat $chip_srr)
+do
+	chip[$b]=$j
+	let 'b+=1'
+done
+
+for c in `seq 0 $a`
+do
+	python3 examples_codes/proportion_chip_peak.py $dire/HIC/results/${hic[$c]}/loops_out.txt $dire/CHIPSEQ/results/IP/${chip[$c]}/chip_seq_peaks.txt
+done
