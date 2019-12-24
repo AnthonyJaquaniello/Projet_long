@@ -26,7 +26,13 @@ do
 	let 'b+=1'
 done
 
-for c in `seq 0 $a`
+d=$a
+let 'd-=1'
+
+for c in `seq 0 $d`
 do
-	python3 examples_codes/proportion_chip_peak.py $dire/HIC/results/${hic[$c]}/loops_out.txt $dire/CHIPSEQ/results/IP/${chip[$c]}/chip_seq_peaks.txt
+    echo ${hic[$c]}
+    echo ${chip[$c]}
+	python3 examples_codes/proportion_chip_peak.py $dire/HIC/results/${hic[$c]}/loops_out.txt $dire/CHIPSEQ/results/IP/${chip[$c]}/chip_seq_peaks.txt ${hic[$c]}_${chip[$c]}
 done
+echo 'All the experiment are terminated ! Enrichiment plot is in the current directory.'

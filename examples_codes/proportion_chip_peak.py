@@ -22,7 +22,7 @@ name = sys.argv[3]
 # Group1
 # ChIPseq peaks 
 group1 = pd.read_table(peaks, header=None, delimiter="\t", skiprows=1)
-group1[1] = [(int(x)+int(y))/2/BIN for x, y in zip(group1[1], group1[2])]
+group1[1] = [round((int(x)+int(y))/2/BIN, None) for x, y in zip(group1[1], group1[2])]
 
 groupA = group1[[0,1]]
 groupA = groupA.drop_duplicates(keep="first")

@@ -27,7 +27,7 @@ pattern = sys.argv[2] #file of pattern
 filename = "detected_loops"
 
 # Input of loops detected by chromosight: 
-df = pd.read_table(pattern, header=None, delimiter=" ", skiprows=1)
+df = pd.read_table(pattern, header=None, delimiter="\t", skiprows=1)
 bin_matrice = 2000 # size of bin of matrice (in bp)
 
 # Loading and normalisation of contact matrices:

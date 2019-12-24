@@ -16,7 +16,7 @@ cp $ref/*.fasta $dire/HIC/data/ref/
 
 echo 'Downloading fastq file...'
 for i in $list_srr;do
-	fasterq-dump $i -O $dire/HIC/data/fastq/
+	fasterq-dump $i -t $dire/HIC -O $dire/HIC/data/fastq/
 done
 echo '--> Done !'
 
@@ -27,6 +27,6 @@ echo '--> Done !'
 
 for i in $list_srr;do
 	DIR="$dire/HIC" SRR="$i" snakemake -j 8
-	chromosight detect $dire/HIC/results/$i/*.bg2 --output $dire/HIC/results/$i/
+	chromosight detect $dire/HIC/results/$i/*.bg2 $dire/HIC/results/$i/
 	python3 examples_codes/loops_visualisation_yeast.py $dire/HIC/results/$i $dire/HIC/results/$i/loops_out.txt
 done
