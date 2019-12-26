@@ -24,6 +24,7 @@ import json
 bank = sys.argv[1] #path toward .npz objects
 #we have one .npz object for each couple of chr
 pattern = sys.argv[2] #file of pattern
+location = sys.argv[3]
 filename = "detected_loops"
 
 # Input of loops detected by chromosight: 
@@ -81,7 +82,7 @@ for chr1 in list_all_chrms :
     plt.imshow(mat**0.25, interpolation="none", cmap="afmhot_r")
     plt.title(chr1+"\n"+bank)
     plt.xlabel("Position along the chromosome , bin "+str(bin_matrice))
-    plt.savefig("results/map_{}.png".format(chr1))
+    plt.savefig("{}/map_{}.png".format(location,chr1))
          
     pos_set = df.loc[(df[0] == chr1)]
     pos_set = np.array(pos_set)
