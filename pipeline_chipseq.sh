@@ -7,6 +7,25 @@ dire=$3 #path to location where dir root will be created
 list_real=$(cat $srr)
 list_input=$(cat $input)
 
+real_tab=()
+input_tab=()
+a=0
+b=0
+
+
+for i in $list_real
+do
+	real_tab[$a]=$i
+	let 'a+=1'
+done
+
+for j in $list_input
+do
+	input_tab[$b]=$j
+	let 'b+=1'
+done
+
+
 echo 'Constructing the arborescence...'
 mkdir $dire/CHIPSEQ/
 mkdir $dire/CHIPSEQ/data/ $dire/CHIPSEQ/results/ $dire/CHIPSEQ/alignment/
@@ -53,3 +72,12 @@ for i in $list_input; do
 	echo $i 'terminated'
 done
 echo '--> done'
+echo 'Cleaning of chip-seq peaks...'
+d=$a-1
+for c in `seq 0 $d`
+do
+	python3 examples_codes/peak_cleaner.py $dire/CHIPSEQ/results/IP/${real_tab[$c]}/chip_seq_peaks.txt $dire/CHIPSEQ/results/input/${input_table[$c]}/chip_seq_peaks.txt $dire/CHIPSEQ/results/IP/${real_table[$c]}/chip_seq_peaks.txt
+done
+echo '--> done'
+
+
