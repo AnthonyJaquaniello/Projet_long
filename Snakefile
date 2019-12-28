@@ -31,8 +31,9 @@ rule sam_extraction:
     shell:
         """
         awk '{{print $1,$3,$4,$2,$5;}}' {input.left_old} > {output.left_new}
+        rm {input.left_old}
         awk '{{print $1,$3,$4,$2,$5;}}' {input.right_old} > {output.right_new}
-        rm {input.left_old} {input.right_old}
+        rm {input.right_old}
         """
 
 rule sam_sorting:
