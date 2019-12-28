@@ -46,8 +46,9 @@ rule sam_sorting:
     shell:
         """
         sort -V -k1 {input.left_unsorted} > {output.left_sorted}
+        rm {input.left_unsorted}
         sort -V -k1 {input.right_unsorted} > {output.right_sorted}
-        rm {input.left_unsorted} {input.right_unsorted}
+        rm {input.right_unsorted}
         """
 
 rule pairing:
