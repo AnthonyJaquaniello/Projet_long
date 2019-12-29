@@ -26,54 +26,56 @@ do
 done
 
 
-echo 'Constructing the arborescence...'
-mkdir $dire/CHIPSEQ/
-mkdir $dire/CHIPSEQ/data/ $dire/CHIPSEQ/results/ $dire/CHIPSEQ/alignment/
-mkdir $dire/CHIPSEQ/data/fastq/ $dire/CHIPSEQ/data/ref/ $dire/CHIPSEQ/results/input/ $dire/CHIPSEQ/results/IP/
-echo '--> done !'
+#echo 'Constructing the arborescence...'
+#mkdir $dire/CHIPSEQ/
+#mkdir $dire/CHIPSEQ/data/ $dire/CHIPSEQ/results/ $dire/CHIPSEQ/alignment/
+#mkdir $dire/CHIPSEQ/data/fastq/ $dire/CHIPSEQ/data/ref/ $dire/CHIPSEQ/results/input/ $dire/CHIPSEQ/results/IP/
+#echo '--> done !'
 
-echo 'Indexing of the refrence...'
-cp $dire/HIC/data/obsolete/genome.fa  $dire/CHIPSEQ/data/ref/genome.fa
-bowtie2-build $dire/CHIPSEQ/data/ref/genome.fa genome
-mv *.bt2 $dire/CHIPSEQ/data/ref/
-echo '--> done !'
+#echo 'Indexing of the refrence...'
+#cp $dire/HIC/data/obsolete/genome.fa  $dire/CHIPSEQ/data/ref/genome.fa
+#bowtie2-build $dire/CHIPSEQ/data/ref/genome.fa genome
+#mv *.bt2 $dire/CHIPSEQ/data/ref/
+#echo '--> done !'
 
-echo 'Traitment of all real chip-seq experiment...'
-for i in $list_real; do
-	fasterq-dump "$i" -t $dire/CHIPSEQ -O $dire/CHIPSEQ/data/fastq/
-	bowtie2 -p8 '--local' '--very-sensitive-local' '-x' $dire/CHIPSEQ/data/ref/genome -q $dire/CHIPSEQ/data/fastq/$i.fastq -S $dire/CHIPSEQ/alignment/$i.sam
-	samtools view -Sb $dire/CHIPSEQ/alignment/$i.sam > $dire/CHIPSEQ/alignment/$i.bam
-	samtools 'sort' $dire/CHIPSEQ/alignment/$i.bam > $dire/CHIPSEQ/alignment/$i.sorted.bam
-	samtools index $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/alignment/$i.sorted.bam.bai
-	rm $dire/CHIPSEQ/alignment/$i.sam $dire/CHIPSEQ/alignment/$i.bam
-	echo 'Peak extraction...'
-	mkdir $dire/CHIPSEQ/results/IP/$i/
-	python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/results/IP/$i/
-	echo $i 'terminated'
-done
-echo '--> done !'
-echo 'Traitment of all input controls...'
-for i in $list_input; do
-	echo 'Downloading of data...'
-	fasterq-dump "$i" -t $dire/CHIPSEQ -O $dire/CHIPSEQ/data/fastq/
-	mv $dire/CHIPSEQ/data/fastq/$i.fastq $dire/CHIPSEQ/data/fastq/$i.input.fastq
-	echo 'Alignment...'
-	bowtie2 -p8 '--local' '--very-sensitive-local' '-x' $dire/CHIPSEQ/data/ref/genome -q $dire/CHIPSEQ/data/fastq/$i.input.fastq -S $dire/CHIPSEQ/alignment/$i.input.sam
-	echo 'Conversion in bam format...'
-	samtools view -Sb $dire/CHIPSEQ/alignment/$i.input.sam > $dire/CHIPSEQ/alignment/$i.input.bam
-	echo 'Sorting...'
-	samtools 'sort' $dire/CHIPSEQ/alignment/$i.input.bam > $dire/CHIPSEQ/alignment/$i.input.sorted.bam
-	echo 'Indexing...'
-	samtools index $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/alignment/$i.input.sorted.bam.bai
-	rm $dire/CHIPSEQ/alignment/$i.input.sam $dire/CHIPSEQ/alignment/$i.input.bam
-	echo 'Peak extraction...'
-	mkdir $dire/CHIPSEQ/results/input/$i/
-	python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/results/input/$i/
-	echo $i 'terminated'
-done
-echo '--> done'
+#echo 'Traitment of all real chip-seq experiment...'
+#for i in $list_real; do
+	#fasterq-dump "$i" -t $dire/CHIPSEQ -O $dire/CHIPSEQ/data/fastq/
+	#bowtie2 -p8 '--local' '--very-sensitive-local' '-x' $dire/CHIPSEQ/data/ref/genome -q $dire/CHIPSEQ/data/fastq/$i.fastq -S $dire/CHIPSEQ/alignment/$i.sam
+	#samtools view -Sb $dire/CHIPSEQ/alignment/$i.sam > $dire/CHIPSEQ/alignment/$i.bam
+	#samtools 'sort' $dire/CHIPSEQ/alignment/$i.bam > $dire/CHIPSEQ/alignment/$i.sorted.bam
+	#samtools index $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/alignment/$i.sorted.bam.bai
+	#rm $dire/CHIPSEQ/alignment/$i.sam $dire/CHIPSEQ/alignment/$i.bam
+	#echo 'Peak extraction...'
+	#mkdir $dire/CHIPSEQ/results/IP/$i/
+	#python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/results/IP/$i/
+	#echo $i 'terminated'
+#done
+#echo '--> done !'
+#echo 'Traitment of all input controls...'
+#for i in $list_input; do
+	#echo 'Downloading of data...'
+	#fasterq-dump "$i" -t $dire/CHIPSEQ -O $dire/CHIPSEQ/data/fastq/
+	#mv $dire/CHIPSEQ/data/fastq/$i.fastq $dire/CHIPSEQ/data/fastq/$i.input.fastq
+	#echo 'Alignment...'
+	#bowtie2 -p8 '--local' '--very-sensitive-local' '-x' $dire/CHIPSEQ/data/ref/genome -q $dire/CHIPSEQ/data/fastq/$i.input.fastq -S $dire/CHIPSEQ/alignment/$i.input.sam
+	#echo 'Conversion in bam format...'
+	#samtools view -Sb $dire/CHIPSEQ/alignment/$i.input.sam > $dire/CHIPSEQ/alignment/$i.input.bam
+	#rm $dire/CHIPSEQ/alignment/$i.input.sam
+	#echo 'Sorting...'
+	#samtools 'sort' $dire/CHIPSEQ/alignment/$i.input.bam > $dire/CHIPSEQ/alignment/$i.input.sorted.bam
+	#rm $dire/CHIPSEQ/alignment/$i.input.bam
+	#echo 'Indexing...'
+	#samtools index $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/alignment/$i.input.sorted.bam.bai
+	#echo 'Peak extraction...'
+	#mkdir $dire/CHIPSEQ/results/input/$i/
+	#python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/results/input/$i/
+	#echo $i 'terminated'
+#done
+#echo '--> done'
 echo 'Cleaning of chip-seq peaks...'
-d=$a-1
+d=$a
+let 'd-=1'
 for c in `seq 0 $d`
 do
 	python3 examples_codes/peak_cleaner.py $dire/CHIPSEQ/results/IP/${real_tab[$c]}/chip_seq_peaks.txt $dire/CHIPSEQ/results/input/${input_table[$c]}/chip_seq_peaks.txt $dire/CHIPSEQ/results/IP/${real_table[$c]}/chip_seq_peaks.txt
