@@ -45,6 +45,6 @@ true_real = true_real.drop("Start_y",axis=1)
 true_real = true_real.drop("End_y", axis=1)
 true_real = true_real.drop("Moy", axis=1)
 true_real.to_csv(path_or_buf=path,sep="\t",
-		 header=["chrom1","start1","end1"])
+		 header=["chrom1","start1","end1"], index= False)
 
 
