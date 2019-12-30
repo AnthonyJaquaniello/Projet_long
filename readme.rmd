@@ -1,4 +1,4 @@
-## Dépendances :
+##Dépendances :
 
 Pour installer les packages nécessaire au fonctionnement, créezun environnement conda à partir du fichier projet_long.yml : *conda env create --file projet_long.yml*
 Il est également nécessaird d'avoir installé **chromosight** disponible sur le dépôt Github : https://github.com/koszullab/chromosight
