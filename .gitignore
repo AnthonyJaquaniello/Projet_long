@@ -1,4 +1,9 @@
-bin
-doc
+bin/
+doc/
 *.ipynb
-results
+results/
+examples_codes/__pycache__/
+.snakemake/
+hic.txt
+chipseq.txt
+input.txt
