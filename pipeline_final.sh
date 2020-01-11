@@ -33,6 +33,6 @@ for c in `seq 0 $d`
 do
     echo ${hic[$c]}
     echo ${chip[$c]}
-	python3 examples_codes/proportion_chip_peak_other_impl.py $dire/HIC/results/${hic[$c]} $dire/CHIPSEQ/results/IP/${chip[$c]}/chip_seq_peaks.txt ${hic[$c]}_${chip[$c]}
+	python3 examples_codes/proportion_chip_peak_other_impl.py $dire/HIC/results/${hic[$c]} $dire/CHIPSEQ/results/IP/${chip[$c]}/chipseq_peaks.txt ${hic[$c]}_${chip[$c]}
 done
 echo 'All the experiment are terminated ! Enrichiment plot is in the HIC/results/ directory.'
