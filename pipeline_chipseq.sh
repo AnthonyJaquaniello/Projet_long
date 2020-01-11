@@ -51,9 +51,9 @@ for i in $list_real; do
 	rm $dire/CHIPSEQ/alignment/$i.bam
 	echo 'Indexing...'
 	samtools index $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/alignment/$i.sorted.bam.bai
-	echo 'Peak extraction...'
-	mkdir $dire/CHIPSEQ/results/IP/$i/
-	python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/results/IP/$i/
+	#echo 'Peak extraction...'
+	#mkdir $dire/CHIPSEQ/results/IP/$i/
+	#python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/results/IP/$i/
 	echo $i 'terminated'
 done
 echo '--> done !'
@@ -72,19 +72,19 @@ for i in $list_input; do
 	rm $dire/CHIPSEQ/alignment/$i.input.bam
 	echo 'Indexing...'
 	samtools index $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/alignment/$i.input.sorted.bam.bai
-	echo 'Peak extraction...'
-	mkdir $dire/CHIPSEQ/results/input/$i/
-	python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/results/input/$i/
+	#echo 'Peak extraction...'
+	#mkdir $dire/CHIPSEQ/results/input/$i/
+	#python3 examples_codes/peaks_extract.py $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/results/input/$i/
 	echo $i 'terminated'
 done
-echo '--> done'
-echo 'Cleaning of chip-seq peaks...'
+
+echo 'Extraction and cleaning of chip-seq peaks...'
 d=$a
 let 'd-=1'
 for c in `seq 0 $d`
 do
     echo ${real_tab[$c]}
     echo ${input_tab[$c]}
-	python3 examples_codes/peak_cleaner.py $dire/CHIPSEQ/results/IP/${real_tab[$c]}/chip_seq_peaks.txt $dire/CHIPSEQ/results/input/${input_tab[$c]}/chip_seq_peaks.txt $dire/CHIPSEQ/results/IP/${real_tab[$c]}/chip_seq_peaks.txt
+    macs2 callpeak -t $dire/CHIPSEQ/alignment/${real_tab[$c]}.sorted.bam -c $dire/CHIPSEQ/alignment/${input_tab[$c]}.input.sorted.bam -n chipseq_peaks --outdir $dire/CHIPSEQ/results/IP/${real_tab[$c]}/ --format BAM --nomodel
 done
 echo 'All chipseq experiment are terminated !'
