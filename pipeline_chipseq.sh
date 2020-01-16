@@ -40,36 +40,69 @@ echo '--> done !'
 
 echo 'Traitment of all real chip-seq experiment...'
 for i in $list_real; do
-	fasterq-dump "$i" -t $dire/CHIPSEQ -O $dire/CHIPSEQ/data/fastq/
-	echo 'Alignment...'
-	bowtie2 -p8 '--local' '--very-sensitive-local' '-x' $dire/CHIPSEQ/data/ref/genome -q $dire/CHIPSEQ/data/fastq/$i.fastq -S $dire/CHIPSEQ/alignment/$i.sam
-	echo 'Conversion in bam format...'
-	samtools view -Sb $dire/CHIPSEQ/alignment/$i.sam > $dire/CHIPSEQ/alignment/$i.bam
-	rm $dire/CHIPSEQ/alignment/$i.sam
-	echo 'Sorting...'
-	samtools 'sort' $dire/CHIPSEQ/alignment/$i.bam > $dire/CHIPSEQ/alignment/$i.sorted.bam
-	rm $dire/CHIPSEQ/alignment/$i.bam
-	echo 'Indexing...'
-	samtools index $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/alignment/$i.sorted.bam.bai
-	echo $i 'terminated'
+	echo 'Downloading of the data...'
+    	fasterq-dump "$i" -t $dire/CHIPSEQ -O $dire/CHIPSEQ/data/fastq/
+	if [ -e $dire/CHIPSEQ/data/fastq/$i'_1.fastq' ] && [ -e $dire/CHIPSEQ/data/fastq/$i'_2.fastq' ] #if paired-end
+	then
+	    echo '[PAIRED-END] Alignment...'
+	    bowtie2 -p8 '-x' $dire/CHIPSEQ/data/ref/genome -1 $dire/CHIPSEQ/data/fastq/$i'_1.fastq' -2 $dire/CHIPSEQ/data/fastq/$i'_2.fastq' -S $dire/CHIPSEQ/alignment/$i'.sam'
+	    echo '[PAIRED-END] Sorting...'
+	    sort -V -k1 $dire/CHIPSEQ/alignment/$i'.sam' > $dire/CHIPSEQ/alignment/$i'.sorted.sam'
+	    echo '[PAIRED-END] Conversion in bam format...'
+	    samtools view -Sb $dire/CHIPSEQ/alignment/$i'.sorted.sam' > $dire/CHIPSEQ/alignment/$i'.sorted.bam'
+	    rm $dire/CHIPSEQ/alignment/$i'.sam' 
+	    echo '[PAIRED-END] Indexing...'
+	    samtools index $dire/CHIPSEQ/alignment/$i'.sorted.bam' $dire/CHIPSEQ/alignment/$i'.sorted.bam.bai'
+	    echo $i 'terminated'
+	else
+	    echo '[SINGLE-END] Alignment...'
+	    bowtie2 -p8 '--local' '--very-sensitive-local' '-x' $dire/CHIPSEQ/data/ref/genome -q $dire/CHIPSEQ/data/fastq/$i.fastq -S $dire/CHIPSEQ/alignment/$i.sam
+	    echo '[SINGLE-END] Conversion in bam format...'
+	    samtools view -Sb $dire/CHIPSEQ/alignment/$i.sam > $dire/CHIPSEQ/alignment/$i.bam
+	    rm $dire/CHIPSEQ/alignment/$i.sam    
+	    echo '[SINGLE-END] Sorting...'
+	    samtools 'sort' $dire/CHIPSEQ/alignment/$i.bam > $dire/CHIPSEQ/alignment/$i.sorted.bam
+	    rm $dire/CHIPSEQ/alignment/$i.bam
+	    echo '[SINGLE-END] Indexing...'
+	    samtools index $dire/CHIPSEQ/alignment/$i.sorted.bam $dire/CHIPSEQ/alignment/$i.sorted.bam.bai
+	    echo $i 'terminated'
+	fi
 done
-echo '--> done !'
+
+
 echo 'Traitment of all input controls...'
 for i in $list_input; do
+	echo $i
 	echo 'Downloading of data...'
 	fasterq-dump "$i" -t $dire/CHIPSEQ -O $dire/CHIPSEQ/data/fastq/
-	mv $dire/CHIPSEQ/data/fastq/$i.fastq $dire/CHIPSEQ/data/fastq/$i.input.fastq
-	echo 'Alignment...'
-	bowtie2 -p8 '--local' '--very-sensitive-local' '-x' $dire/CHIPSEQ/data/ref/genome -q $dire/CHIPSEQ/data/fastq/$i.input.fastq -S $dire/CHIPSEQ/alignment/$i.input.sam
-	echo 'Conversion in bam format...'
-	samtools view -Sb $dire/CHIPSEQ/alignment/$i.input.sam > $dire/CHIPSEQ/alignment/$i.input.bam
-	rm $dire/CHIPSEQ/alignment/$i.input.sam
-	echo 'Sorting...'
-	samtools 'sort' $dire/CHIPSEQ/alignment/$i.input.bam > $dire/CHIPSEQ/alignment/$i.input.sorted.bam
-	rm $dire/CHIPSEQ/alignment/$i.input.bam
-	echo 'Indexing...'
-	samtools index $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/alignment/$i.input.sorted.bam.bai
-	echo $i 'terminated'
+	if [ -e $dire/CHIPSEQ/data/fastq/$i'_1.fastq' ] && [ -e $dire/CHIPSEQ/data/fastq/$i'_2.fastq' ] 
+	then
+	    mv $dire/CHIPSEQ/data/fastq/$i'_1.fastq' $dire/CHIPSEQ/data/fastq/$i'_1.input.fastq'
+	    mv $dire/CHIPSEQ/data/fastq/$i'_2.fastq' $dire/CHIPSEQ/data/fastq/$i'_2.input.fastq'
+	    echo '[PAIRED-END] Alignment...'
+	    bowtie2 -p8 '-x' $dire/CHIPSEQ/data/ref/genome -1 $dire/CHIPSEQ/data/fastq/$i'_1.input.fastq' -2 $dire/CHIPSEQ/data/fastq/$i'_2.input.fastq' -S $dire/CHIPSEQ/alignment/$i'.input.sam'
+	    echo '[PAIRED-END] Sorting...'
+	    sort -V -k1 $dire/CHIPSEQ/alignment/$i'.input.sam' > $dire/CHIPSEQ/alignment/$i'.input.sorted.sam'
+	    echo '[PAIRED-END] Conversion in bam format...'
+	    samtools view -Sb $dire/CHIPSEQ/alignment/$i'.input.sorted.sam' > $dire/CHIPSEQ/alignment/$i'.input.sorted.bam'
+	    rm $dire/CHIPSEQ/alignment/$i'.input.sam' 
+	    echo '[PAIRED-END] Indexing...'
+	    samtools index $dire/CHIPSEQ/alignment/$i'.input.sorted.bam' $dire/CHIPSEQ/alignment/$i'.input.sorted.bam.bai'
+	    echo $i 'terminated'
+	else
+	    mv $dire/CHIPSEQ/data/fastq/$i'.fastq' $dire/CHIPSEQ/data/fastq/$i'.input.fastq' 
+	    echo '[SINGLE-END] Alignment...'
+	    bowtie2 -p8 '--local' '--very-sensitive-local' '-x' $dire/CHIPSEQ/data/ref/genome -q $dire/CHIPSEQ/data/fastq/$i.input.fastq -S $dire/CHIPSEQ/alignment/$i.input.sam
+	    echo '[SINGLE-END] Conversion in bam format...'
+	    samtools view -Sb $dire/CHIPSEQ/alignment/$i.input.sam > $dire/CHIPSEQ/alignment/$i.input.bam
+	    rm $dire/CHIPSEQ/alignment/$i.input.sam
+	    echo '[SINGLE-END] Sorting...'
+	    samtools 'sort' $dire/CHIPSEQ/alignment/$i.input.bam > $dire/CHIPSEQ/alignment/$i.input.sorted.bam
+	    rm $dire/CHIPSEQ/alignment/$i.input.bam
+	    echo '[SINGLE-END] Indexing...'
+	    samtools index $dire/CHIPSEQ/alignment/$i.input.sorted.bam $dire/CHIPSEQ/alignment/$i.input.sorted.bam.bai
+	    echo $i 'terminated'
+	fi
 done
 
 echo 'Extraction and cleaning of chip-seq peaks...'
